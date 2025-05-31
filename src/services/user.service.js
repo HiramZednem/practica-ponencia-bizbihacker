@@ -1,5 +1,6 @@
 import { db } from "../db/db.js";
 import bcrypt, { compare } from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const create = async (nombre, correo, contrasenia) => {
     contrasenia = await bcrypt.hash(contrasenia, 10);
@@ -29,7 +30,11 @@ const login = async (correo, contrasenia) => {
     console.log(resultado)
     if(resultado) {
         const match = await bcrypt.compare(contrasenia, resultado[0].contrasenia);
-        if(match) { return resultado}
+        if(match) { 
+            const token = jwt.sign({correo}, 'secreto', {expiresIn: '1h'})
+
+            return {resultado, token}
+        }
     }
     return 'login fallido';
 }
