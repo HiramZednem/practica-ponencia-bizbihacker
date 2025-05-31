@@ -22,9 +22,21 @@ export const login = async(req, res) => {
     }
 }
 
+export const getUserById = async(req, res) => {
+    try {
+        const {id} = req.body; 
+        const usuario = await userService.getUserById(id);
+        return res.json(usuario);
+    } catch {
+        return res.json('ha ocurrido un error')
+    }
+}
+
+
 const userController = {
     create,
-    login
+    login,
+    getUserById
 }
 
 export default userController;
